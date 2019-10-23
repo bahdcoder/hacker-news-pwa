@@ -19,10 +19,7 @@ const storiesReducer = (state, action) => {
     if (action.type === SET_STORY)
         return {
             ...state,
-            fetchedStories: [
-                ...state.fetchedStories,
-                action.payload
-            ]
+            fetchedStories: [...state.fetchedStories, action.payload]
         }
 
     if (action.type === SET_STORIES)
@@ -62,15 +59,19 @@ export function Stories({ api }) {
             payload: fetchedIndex + pageSize
         })
 
-        stories.slice(fetchedIndex, pageSize + fetchedIndex).forEach(storyId => {
-            api.getItem(storyId).then(payload =>
-                payload && dispatchStories({
-                    type: SET_STORY,
-                    storyId,
-                    payload
-                })
-            )
-        })
+        stories
+            .slice(fetchedIndex, pageSize + fetchedIndex)
+            .forEach(storyId => {
+                api.getItem(storyId).then(
+                    payload =>
+                        payload &&
+                        dispatchStories({
+                            type: SET_STORY,
+                            storyId,
+                            payload
+                        })
+                )
+            })
     }
 
     useEffect(() => {
@@ -85,7 +86,8 @@ export function Stories({ api }) {
     }, [api])
 
     useEffect(() => {
-        const handleScroll = () => fetchStoriesDebounced({ stories, fetchedIndex })
+        const handleScroll = () =>
+            fetchStoriesDebounced({ stories, fetchedIndex })
 
         window.addEventListener('scroll', handleScroll)
 
